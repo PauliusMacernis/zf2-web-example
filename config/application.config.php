@@ -3,7 +3,8 @@ return array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
         'Application',
-    ),
+        'Debug'
+        ),
 
     // These are various options for the listeners attached to the ModuleManager
     'module_listener_options' => array(
@@ -14,7 +15,7 @@ return array(
         'module_paths' => array(
             './module',
             './vendor',
-        ),
+            ),
 
         // An array of paths from which to glob configuration files after
         // modules are loaded. These effectively override configuration
@@ -61,4 +62,4 @@ return array(
    // Initial configuration with which to seed the ServiceManager.
    // Should be compatible with Zend\ServiceManager\Config.
    // 'service_manager' => array(),
-);
+    );
