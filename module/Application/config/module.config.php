@@ -99,4 +99,8 @@ return array(
             ),
         ),
     ),
+    'application' => array(
+        'version'   => '[0.0.1]',
+        'name'      => '[Application name]'
+    )
 );
