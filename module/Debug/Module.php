@@ -6,6 +6,7 @@ use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\ModuleManager\ModuleManager;
 use Zend\EventManager\Event;
+use Zend\Mvc\MvcEvent;
 
 class Module implements AutoloaderProviderInterface {
 
@@ -20,6 +21,26 @@ class Module implements AutoloaderProviderInterface {
         $moduleManager = $event->getTarget();
         $loadedModules = $moduleManager->getLoadedModules();
         error_log(var_export($loadedModules, true));
+    }
+
+    public function onBootstrap(MvcEvent $e) {
+
+        $eventManager = $e->getApplication()->getEventManager();
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'handleError'));
+    }
+
+    public function handleError(MvcEvent $event) {
+
+        $controller = $event->getController();
+        $error      = $event->getParam('error');
+        $exception  = $event->getParam('exception');
+        $message    = 'Error: ' . $error;
+        if ($exception instanceof \Exception) {
+            $message .= ', Exception(' . $exception->getMessage() . '): ' .
+                    $exception->getTraceAsString();
+        }
+
+        error_log($message);
     }
 
     public function getConfig() {
