@@ -3,6 +3,7 @@
 <IfModule mod_suphp.c>
   AddHandler application/x-httpd-php-5.5.0 .php
 </IfModule>
+SuPHP_ConfigPath %{DOCUMENT_ROOT}
 # End A2 Switcher Block
 
 RewriteEngine On
