@@ -45,7 +45,21 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
+            //'timer' => 'Debug\Service\Factory\Timer'
         ),
+        'abstract_factories' => array(
+            'Debug\Service\Factory\TimerAbstractFactory'
+        ),
+        'invokables' => array(
+            //'timer' => 'Debug\Service\Timer'
+        ),
+        'aliases' => array(
+            'Debug\Timer' => 'timer',
+        ),
+        'initializers' => array(
+            'User\Service\Initializer\Db',
+        )
+        
     ),
 //    'translator' => array(
 //        'locale' => 'en_US',
@@ -89,4 +103,13 @@ return array(
 //        'version'   => '[0.0.1]',
 //        'name'      => '[Application name]'
 //    )
+    'timers' => array( // This is top-level config key for our abstract factory
+        'timer' => array( // This is the name of our service
+            'times_as_float' => true,
+            // and in the array we have parameters to use for the service
+        ),
+        'timer_non_float' => array( // This is the name of our service
+            'times_as_float' => false,
+        )
+    ),
 );

@@ -24,24 +24,55 @@ class Module implements AutoloaderProviderInterface {
     }
 
     public function onBootstrap(MvcEvent $e) {
-
+               
         $eventManager = $e->getApplication()->getEventManager();
-        $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'handleError'));
+        $eventManager->attach(
+            MvcEvent::EVENT_DISPATCH_ERROR, 
+            array($this, 'handleError')
+            //function(MvcEvent $event) {
+            //    error_log($event->getParam('error'));
+            //    $event->stopPropagation(true);
+            //}
+        );
+        
+        // Bellow is how we get access to the service manager
+        $serviceManager = $e->getApplication()->getServiceManager();
+        // Here we start the timer 
+        $timer = $serviceManager->get('timer');
+        $timer->start('mvc-execution');
+        
+        // And here we attach a listener to the finish event that has to be executed with priority 2
+        // The priority here is 2 because listeners with that priority will be executed just before the
+        // actual finish event is triggered.
+        $eventManager->attach(MvcEvent::EVENT_FINISH, array($this, 'getMvcDuration'), 2);
+        
+    }
+    
+    public function getMvcDuration(MvcEvent $event) {
+        
+        // Here we get service manager
+        $serviceManager = $event->getApplication()->getServiceManager();
+        // Get the already created instance of our timer service
+        $timer = $serviceManager->get('timer');
+        $duration = $timer->stop('mvc-execution');
+        // and finally print the duration
+        error_log("MVC Duration:" . $duration . " seconds");
+        
     }
 
-    public function handleError(MvcEvent $event) {
-
-        $controller = $event->getController();
-        $error      = $event->getParam('error');
-        $exception  = $event->getParam('exception');
-        $message    = 'Error: ' . $error;
-        if ($exception instanceof \Exception) {
-            $message .= ', Exception(' . $exception->getMessage() . '): ' .
-                    $exception->getTraceAsString();
-        }
-
-        error_log($message);
-    }
+//    public function handleError(MvcEvent $event) {
+//
+//        $controller = $event->getController();
+//        $error      = $event->getParam('error');
+//        $exception  = $event->getParam('exception');
+//        $message    = 'Error: ' . $error;
+//        if ($exception instanceof \Exception) {
+//            $message .= ', Exception(' . $exception->getMessage() . '): ' .
+//                    $exception->getTraceAsString();
+//        }
+//
+//        error_log($message);
+//    }
 
     public function getConfig() {
         return include __DIR__ . '/config/module.config.php';
