@@ -48,6 +48,19 @@ class Module implements AutoloaderProviderInterface {
         
     }
     
+    public function handleError(MvcEvent $event) {
+        $controller = $event->getController();
+        $error      = $event->getParam('error');
+        $exception  = $event->getParam('exception');
+        $message    = 'Error: ' . $error;
+        if ($exception instanceof \Exception) {
+            $message .= ', Exception(' . $exception->getMessage() . '): ' .
+                    $exception->getTraceAsString();
+        }
+
+        error_log($message);
+    }
+    
     public function getMvcDuration(MvcEvent $event) {
         
         // Here we get service manager
@@ -59,21 +72,7 @@ class Module implements AutoloaderProviderInterface {
         error_log("MVC Duration:" . $duration . " seconds");
         
     }
-
-//    public function handleError(MvcEvent $event) {
-//
-//        $controller = $event->getController();
-//        $error      = $event->getParam('error');
-//        $exception  = $event->getParam('exception');
-//        $message    = 'Error: ' . $error;
-//        if ($exception instanceof \Exception) {
-//            $message .= ', Exception(' . $exception->getMessage() . '): ' .
-//                    $exception->getTraceAsString();
-//        }
-//
-//        error_log($message);
-//    }
-
+    
     public function getConfig() {
         return include __DIR__ . '/config/module.config.php';
     }
