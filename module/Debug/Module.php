@@ -7,6 +7,7 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\ModuleManager\ModuleManager;
 use Zend\EventManager\Event;
 use Zend\Mvc\MvcEvent;
+use Zend\View\Model\ViewModel;
 
 class Module implements AutoloaderProviderInterface {
 
@@ -24,35 +25,42 @@ class Module implements AutoloaderProviderInterface {
     }
 
     public function onBootstrap(MvcEvent $e) {
-               
+
         $eventManager = $e->getApplication()->getEventManager();
-        $eventManager->attach(
-            MvcEvent::EVENT_DISPATCH_ERROR, 
-            array($this, 'handleError')
-            //function(MvcEvent $event) {
-            //    error_log($event->getParam('error'));
-            //    $event->stopPropagation(true);
-            //}
-        );
-        
+        $eventManager->attach(MvcEvent::EVENT_RENDER, array($this, 'addDebugOverlay'), 100);
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'handleError'));        
+
         // Bellow is how we get access to the service manager
         $serviceManager = $e->getApplication()->getServiceManager();
+        
         // Here we start the timer 
         $timer = $serviceManager->get('timer');
         $timer->start('mvc-execution');
-        
         // And here we attach a listener to the finish event that has to be executed with priority 2
         // The priority here is 2 because listeners with that priority will be executed just before the
         // actual finish event is triggered.
         $eventManager->attach(MvcEvent::EVENT_FINISH, array($this, 'getMvcDuration'), 2);
-        
+                
     }
-    
+
+    public function addDebugOverlay(MvcEvent $event) {
+        $viewModel = $event->getViewModel();
+        
+        // if this is not terminated case (e.g. Ajax query)
+        if (!$viewModel->terminate()) {
+
+            $sidebarView = new ViewModel();
+            $sidebarView->setTemplate('debug/layout/sidebar');
+            $sidebarView->addChild($viewModel, 'content');
+            $event->setViewModel($sidebarView);
+        }
+    }
+
     public function handleError(MvcEvent $event) {
         $controller = $event->getController();
-        $error      = $event->getParam('error');
-        $exception  = $event->getParam('exception');
-        $message    = 'Error: ' . $error;
+        $error = $event->getParam('error');
+        $exception = $event->getParam('exception');
+        $message = 'Error: ' . $error;
         if ($exception instanceof \Exception) {
             $message .= ', Exception(' . $exception->getMessage() . '): ' .
                     $exception->getTraceAsString();
@@ -60,9 +68,9 @@ class Module implements AutoloaderProviderInterface {
 
         error_log($message);
     }
-    
+
     public function getMvcDuration(MvcEvent $event) {
-        
+
         // Here we get service manager
         $serviceManager = $event->getApplication()->getServiceManager();
         // Get the already created instance of our timer service
@@ -72,7 +80,7 @@ class Module implements AutoloaderProviderInterface {
         error_log("MVC Duration:" . $duration . " seconds");
         
     }
-    
+
     public function getConfig() {
         return include __DIR__ . '/config/module.config.php';
     }
