@@ -28,11 +28,11 @@ class Module implements AutoloaderProviderInterface {
 
         $eventManager = $e->getApplication()->getEventManager();
         $eventManager->attach(MvcEvent::EVENT_RENDER, array($this, 'addDebugOverlay'), 100);
-        $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'handleError'));        
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'handleError'));
 
         // Bellow is how we get access to the service manager
         $serviceManager = $e->getApplication()->getServiceManager();
-        
+
         // Here we start the timer 
         $timer = $serviceManager->get('timer');
         $timer->start('mvc-execution');
@@ -40,12 +40,11 @@ class Module implements AutoloaderProviderInterface {
         // The priority here is 2 because listeners with that priority will be executed just before the
         // actual finish event is triggered.
         $eventManager->attach(MvcEvent::EVENT_FINISH, array($this, 'getMvcDuration'), 2);
-                
     }
 
     public function addDebugOverlay(MvcEvent $event) {
         $viewModel = $event->getViewModel();
-        
+
         // if this is not terminated case (e.g. Ajax query)
         if (!$viewModel->terminate()) {
 
@@ -78,7 +77,7 @@ class Module implements AutoloaderProviderInterface {
         $duration = $timer->stop('mvc-execution');
         // and finally print the duration
         error_log("MVC Duration:" . $duration . " seconds");
-        
+
     }
 
     public function getConfig() {
