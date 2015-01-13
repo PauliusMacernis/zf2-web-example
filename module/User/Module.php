@@ -1,6 +1,8 @@
 <?php
 namespace User;
 
+use Zend\Mvc\MvcEvent;
+
 class Module
 {
     public function getConfig()
@@ -18,4 +20,16 @@ class Module
             ),
         );
     }
+    
+    public function onBootstrap(MvcEvent $e)
+    {
+        // existing code...
+        
+        $services = $e->getApplication()->getServiceManager();
+        $dbAdapter = $services->get('database');
+        // set the default database adapter
+        \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::setStaticAdapter($dbAdapter);
+        
+    }
+    
 }

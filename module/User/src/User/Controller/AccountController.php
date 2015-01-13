@@ -4,6 +4,7 @@ namespace User\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use User\Form\User as UserForm;
+use User\Model\User as UserModel;
 //use Zend\View\Model\ViewModel;
 
 class AccountController extends AbstractActionController
@@ -24,9 +25,29 @@ class AccountController extends AbstractActionController
             );
             $form->setData($data);
             if($form->isValid()) {
-                // @todo: save the data of the new user
+                // save the data of the new user
+                $model = new UserModel();
+                $id = $model->insert($form->getData());
+                
+                // @todo: redirect the user to the view user action
+                
             }
         }
+        
+        
+        // @todo: edit and bring this to model
+        // v1
+        //// $db = $this->getServiceLocator()->get('database');
+        /*$db->query('SELECT id FROM users WHERE username=? AND password=?',
+                array($login = 'gfhghh', 'ytut yutyutyu')
+        );*/
+        // v2
+        //// $escapedUsername = $db->getPlatform()->quoteValue($username = 'gfhghh');
+        //// $escapedPassword = $db->getPlatform()->quoteValue($password = 'ytut yutyutyu');
+        //// $sql = sprintf("SELECT id FROM users WHERE username=%s AND password=%s",
+        ////        $escapedUsername, $escapedPassword);
+        //// $data = $db->query($sql, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
+        
         
         // pass the data to the view for visualization
         return array('form1' => $form);
@@ -49,7 +70,14 @@ class AccountController extends AbstractActionController
     }
     
     public function deleteAction() {
+        $id = $this->getRequest()->getQuery()->get('id');
+        if($id) {
+            $userModel = new UserModel();
+            $userModel->delete(array('id' => $id));
+        }
+        
         return array();
+        
     }
 
 }

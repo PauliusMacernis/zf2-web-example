@@ -1,0 +1,29 @@
+<?php
+
+/*
+ * Currently the mysqli and pgsql drivers allow you to define the host using the host or the 
+ * hostname key. The same applies for the keys username, user, password, passwd, pw, database,
+ * dbname, and db. 
+ * The recommendation will be to stick to hostname, username, password, and database, as these
+ * parameters are available for all db adapters. Thus switching to another adapter 
+ * would require only changing the value of the driver parameter.
+ */
+
+return array(
+    'db' => array(
+        // The database driver. Mysqli, Sqlsrv, Pdo_Sqlite, Pdo_Mysql, Pdo=OtherPdoDriver
+        'driver' => 'Mysqli',
+        'database' => 'tc', // generally required the name of the database (schema)
+        'username' => 'tc-db-username', // generally required the connection username
+        'password' => 'tc-db-password', // generally required the connection password
+        // now generally required the IP address or hostname to connect to
+        'hostname' => 'localhost',
+        // 'port' => 1234, // not generally required the port to connect to (if applicable)
+        // 'charset' => 'utf8', // not generally required the character set to use
+        'options' => array(
+            // For the mysqli driver, at the momment, you will have to add the driver option buffer_results.
+            // Otherwise, you will be able to get only the first result from a set.
+            'buffer_results' => 1
+        )
+    )
+);

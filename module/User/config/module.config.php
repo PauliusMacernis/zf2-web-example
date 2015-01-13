@@ -42,6 +42,11 @@ return array(
             ),
         ),
     ),
+    'service_manager' => array(
+        'factories' => array(
+            'database' => 'User\Service\Factory\Database',
+        ),
+    ),
     'controllers' => array(
         'invokables' => array(
             // bellow is key             and bellow is fully qualified class name
