@@ -58,6 +58,7 @@ return array(
         ),
         'initializers' => array(
             'User\Service\Initializer\Db',
+            'Debug\Service\Initializer\DbProfiler',
         )
         
     ),

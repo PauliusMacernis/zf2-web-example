@@ -28,8 +28,9 @@ class Module implements AutoloaderProviderInterface {
 
         $eventManager = $e->getApplication()->getEventManager();
         $eventManager->attach(MvcEvent::EVENT_RENDER, array($this, 'addDebugOverlay'), 100);
+        $eventManager->attach(MvcEvent::EVENT_RENDER, array($this, 'injectViewVariables'), 100);
         $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'handleError'));
-
+        
         // Bellow is how we get access to the service manager
         $serviceManager = $e->getApplication()->getServiceManager();
 
@@ -40,6 +41,7 @@ class Module implements AutoloaderProviderInterface {
         // The priority here is 2 because listeners with that priority will be executed just before the
         // actual finish event is triggered.
         $eventManager->attach(MvcEvent::EVENT_FINISH, array($this, 'getMvcDuration'), 2);
+        $eventManager->attach(MvcEvent::EVENT_FINISH, array($this, 'dbProfilerStats'), 2);
     }
 
     public function addDebugOverlay(MvcEvent $event) {
@@ -52,6 +54,21 @@ class Module implements AutoloaderProviderInterface {
             $sidebarView->setTemplate('debug/layout/sidebar');
             $sidebarView->addChild($viewModel, 'content');
             $event->setViewModel($sidebarView);
+        }
+    }
+    
+    public function injectViewVariables(MvcEvent $event) {
+        $viewModel = $event->getViewModel();
+        
+        $services = $event->getApplication()->getServiceManager();
+        $variables = array();
+        if($services->has('database-profiler')) {
+            // If we have database profiler service then we inject it in the view
+            $profiler = $services->get('database-profiler');
+            $variables['profiler'] = $profiler;
+        }
+        if(!empty($variables)) {
+            $viewModel->setVariables($variables);
         }
     }
 
@@ -78,6 +95,19 @@ class Module implements AutoloaderProviderInterface {
         // and finally print the duration
         error_log("MVC Duration:" . $duration . " seconds");
 
+    }
+    
+    public function dbProfilerStats(MvcEvent $event) {
+        $services = $event->getApplication()->getServiceManager();
+        if($services->has('database-profiler')) {
+            $profiler = $services->get('database-profiler');
+            foreach ($profiler->getProfiles() as $profile) {
+                $message = '"' . $profile['sql'] . '(' 
+                        . implode(',', $profile['parameters']->getNamedArray()) 
+                        . ')" took ' . $profile['elapse'] . 'seconds' . "\n";
+                error_log($message);
+            }
+        }
     }
 
     public function getConfig() {
