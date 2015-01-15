@@ -69,5 +69,10 @@ return array(
             __DIR__ . '/../view',
         ),
     ),
+    'table-gateway' => array(
+        'map' => array(
+            'users' => 'User\Model\User',
+        )
+    )
     
 );
