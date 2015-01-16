@@ -40,10 +40,27 @@
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
                         <li class="active"><a href="<?php echo $this->url('user/default', array('controller' => 'account', 'action' => 'register')) ?>"><?php echo $this->translate('Register') ?></a></li>
+                        <li class="active"><a href="<?php echo $this->url('user/default', array('controller' => 'log', 'action' => 'in')) ?>"><?php echo $this->translate('Log in') ?></a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
+        <?php
+        
+        $namespaces = array('error', 'success', 'info', 'default');
+        foreach ($namespaces as $namespace) {
+            $flashMessages = $this->flashMessenger()->render($namespace);
+            if(!empty($flashMessages)) {
+                ?>
+                <div id="myAlert" class="alert alert-<?= $namespace ?>" data-alert="alert">
+                    <a class="close" data-dismiss="alert">x</a>
+                    <?= $flashMessages ?>
+                </div>
+                <?php
+            }
+        }
+        
+        ?>
         <div class="container">
             <?php echo $this->content; ?>
             <hr>

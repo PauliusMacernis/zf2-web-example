@@ -89,16 +89,12 @@ class AccountController extends AbstractActionController {
         return array();
     }
     
-    /*
-    public function inAction() {
-        if(!$this->getRequest()->isPost()) {
-            return array();
-        }
-        
-        $username = $this->params()->fromPost('username');
-        $password = $this->params()->fromPost('password');
-        
-        // ... 
+    public function meAction() {
+        return array();
     }
-    */
+    
+    public function deniedAction() {
+        return array();
+    }
+    
 }

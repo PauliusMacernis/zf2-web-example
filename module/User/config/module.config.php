@@ -24,7 +24,7 @@ return array(
                         // the controllers for your module are found
                         '__NAMESPACE__' => 'User\Controller',
                         'controller'    => 'Account',
-                        'action'        => 'index',
+                        'action'        => 'me',
                     ),
                 ),
                 // ...the children definition is comming...
@@ -55,11 +55,15 @@ return array(
         'factories' => array(
             'database' => 'User\Service\Factory\Database',
         ),
+        'invokables' => array(
+            'table-gateway' => 'User\Service\Invokable\TableGateway',
+        )
     ),
     'controllers' => array(
         'invokables' => array(
             // bellow is key             and bellow is fully qualified class name
-            'User\Controller\Account' => 'User\Controller\AccountController'
+            'User\Controller\Account' => 'User\Controller\AccountController',
+            'User\Controller\Log'     => 'User\Controller\LogController',
         ),
     ),
     'view_manager' => array(
