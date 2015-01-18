@@ -28,30 +28,30 @@ foreach($output as $file) {
 		// deleted file, do nothing
 		continue;
 	}
-	
+
 	$fileName = trim(substr($file, 1));
-	
+
 	/**
 	* Only PHP files
 	*/
 	if(!preg_match('/\.ph(p|html)(\.dist){0,1}$/', $fileName)) {
 		continue;
 	}
-	
+
 	/**
 	* Check for parse errors
 	*/
 	$output = array();
 	$return = 0;
 	exec("php -l " . escapeshellarg($fileName), $output, $return);
-	
+
 	if($return != 0) {
 		echo "PHP file fails to parse: " . $fileName . ":" . PHP_EOL;
 		echo implode(PHP_EOL, $output) . PHP_EOL;
 		$exit = 1;
 		continue;
 	}
-	
+
 	/*
 	* PHP-CS-Fixer
 	*/
@@ -68,9 +68,9 @@ foreach($output as $file) {
 		$cwd = dirname($gitDir);
 	}
 	if($cwd === '') {
-		$cwd = '.';	
+		$cwd = '.';
 	}
-	
+
 	$output = array();
 	$return = null;
 		exec("$cwd/php-cs-fixer.phar fix -v $dryRun --level=psr2 " . escapeshellarg($fileName), $output, $return);
