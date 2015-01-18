@@ -7,8 +7,8 @@ use Zend\Db\Adapter\Profiler\Profiler;
 use Zend\Db\Adapter\Profiler\ProfilerAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class DbProfiler implements InitializerInterface {
-    
+class DbProfiler implements InitializerInterface
+{
     /**
      * @var Zend\Db\Adapter\Profiler\Profiler
      */
@@ -16,18 +16,20 @@ class DbProfiler implements InitializerInterface {
 
     /**
      * Initialize
-     * 
+     *
      * @param $instance
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function initialize($instance, ServiceLocatorInterface $serviceLocator) {
+    public function initialize($instance, ServiceLocatorInterface $serviceLocator)
+    {
         if($instance instanceof ProfilerAwareInterface) {
             $instance->setProfiler($this->getProfiler($serviceLocator));
         }
     }
-    
-    public function getProfiler($serviceLocator) {
+
+    public function getProfiler($serviceLocator)
+    {
         if(!$this->profiler) {
             if($serviceLocator->has('database-profiler')) {
                 $this->profiler = $serviceLocator->get('database-profiler');
@@ -36,9 +38,9 @@ class DbProfiler implements InitializerInterface {
                 $serviceLocator->setService('database-profiler', $this->profiler);
             }
         }
-        
+
         return $this->profiler;
-        
+
     }
 
 }

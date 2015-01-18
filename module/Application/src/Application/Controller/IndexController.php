@@ -18,33 +18,33 @@ class IndexController extends AbstractActionController
     {
         $serviceLocator = $this->getServiceLocator();
         $config = $serviceLocator->get('config');
-                
+
         // layout will be our parent model
         $layoutViewModel = new ViewModel();
         // it must render view template with name 'layout/layout'
         $layoutViewModel->setTemplate('layout/layout');
-        
-        
+
+
         $viewModel = new ViewModel();
         $viewModel->setVariables(array(
             'version' => $config['application']['version'],
             'applicationName' => $config['application']['name']
         ));
         $viewModel->setTemplate('application/index/index');
-        
+
         return $viewModel;
-                
+
     }
-    
+
     public function aboutAction()
     {
         $viewModel = new ViewModel();
         $viewModel->setVariables(array());
         $viewModel->setTemplate('application/index/about');
-        
-        $viewModel->setTerminal(true); // prevent adding children 
-        
+
+        $viewModel->setTerminal(true); // prevent adding children
+
         return $viewModel;
-        
+
     }
 }

@@ -8,13 +8,15 @@ use User\Model\User as UserModel;
 
 //use Zend\View\Model\ViewModel;
 
-class AccountController extends AbstractActionController {
-
-    public function indexAction() {
+class AccountController extends AbstractActionController
+{
+    public function indexAction()
+    {
         return array();
     }
 
-    public function addAction() {
+    public function addAction()
+    {
         $form = new UserForm();
         if ($this->getRequest()->isPost()) {
             $data = array_merge_recursive(
@@ -57,21 +59,25 @@ class AccountController extends AbstractActionController {
     /**
      * Anonymous users can use this action to register new accounts
      */
-    public function registerAction() {
+    public function registerAction()
+    {
         $result = $this->forward()->dispatch('User\Controller\Account', array('action' => 'add')); // internal redirect
 
         return $result;
     }
 
-    public function viewAction() {
+    public function viewAction()
+    {
         return array();
     }
 
-    public function editAction() {
+    public function editAction()
+    {
         return array();
     }
 
-    public function deleteAction() {
+    public function deleteAction()
+    {
         // $id = $this->getRequest()->getQuery()->get('id'); // works
         // $id = $this->params()->fromRoute('id'); // also works
         $id = $this->params('id'); // params from request: GET, POST, headers, routing.
@@ -88,13 +94,15 @@ class AccountController extends AbstractActionController {
 
         return array();
     }
-    
-    public function meAction() {
+
+    public function meAction()
+    {
         return array();
     }
-    
-    public function deniedAction() {
+
+    public function deniedAction()
+    {
         return array();
     }
-    
+
 }

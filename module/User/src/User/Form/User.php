@@ -7,13 +7,14 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 use Zend\InputFilter\Factory as InputFactory;
 
-class User extends Form {
-
-    public function __construct($name = 'user', $options = array()) {
+class User extends Form
+{
+    public function __construct($name = 'user', $options = array())
+    {
         parent::__construct($name, $options);
-        
+
         $this->setAttribute('method', 'post');
-        
+
         // This is how we define "email" element
         $this->add(array(
             'name' => 'email', // the unique name of the element in form.
@@ -32,9 +33,9 @@ class User extends Form {
                 'required' => true, // Ex: <input required="true"
                 'placeholder' => 'Email Address...', // HTML5 placeholder attribute
             )
-            
+
         ));
-        
+
         $this->add(array(
             'name' => 'password',
             'type' => 'Zend\Form\Element\Password',
@@ -46,7 +47,7 @@ class User extends Form {
                 'label' => 'Password:',
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'password_verify',
             'type' => 'Zend\Form\Element\Password',
@@ -58,7 +59,7 @@ class User extends Form {
                 'label' => 'Verify Password:',
             ),
         ));
-        
+
         $this->add(array(
             'name' => 'name',
             'type' => 'Zend\Form\Element\Text',
@@ -70,7 +71,7 @@ class User extends Form {
                 'label' => 'Name:',
             ),
         ));
-        
+
         // Phone
         $this->add(array(
             'name' => 'phone', // the unique name of the element in form.
@@ -90,9 +91,9 @@ class User extends Form {
             ),
             //'type' => 'Zend\Form\Element\Email',
                         // The above must be valid Zend Form element.
-                        // You can also use short names as "email" instead of "Zend\Form\Element\Email"            
+                        // You can also use short names as "email" instead of "Zend\Form\Element\Email"
         ));
-                
+
         // Photo file
         $this->add(array(
             'type' => 'Zend\Form\Element\File',
@@ -105,13 +106,13 @@ class User extends Form {
                 'id' => 'photo'
             )
         ));
-        
+
         // This is the special code that protects our form being submitted from automated scripts
         $this->add(array(
             'name' => 'csrf',
             'type' => 'Zend\Form\Element\Csrf',
         ));
-        
+
         // This is submit button
         $this->add(array(
             'name' => 'submit',
@@ -121,14 +122,15 @@ class User extends Form {
                 'required' => false,
             )
         ));
-        
+
     }
-    
-    public function getInputFilter() {
+
+    public function getInputFilter()
+    {
         if(!$this->filter) {
             $inputFilter = new InputFilter();
             $factory = new InputFactory();
-            
+
             // Is the email address valid?
             $inputFilter->add($factory->createInput(array(
                 'name' => 'email',
@@ -159,8 +161,8 @@ class User extends Form {
                     )
                 )
             )));
-            
-            
+
+
             // Verify the name are not empty
             $inputFilter->add($factory->createInput(array(
                 'name' => 'name',
@@ -183,7 +185,7 @@ class User extends Form {
                     )
                 )
             )));
-            
+
             // Verify the password are not empty
             $inputFilter->add($factory->createInput(array(
                 'name' => 'password',
@@ -206,7 +208,7 @@ class User extends Form {
                     )
                 )
             )));
-            
+
             // Verify the password is confirmed correctly
             $inputFilter->add($factory->createInput(array(
                 'name' => 'password_verify',
@@ -227,8 +229,8 @@ class User extends Form {
                     )
                 )
             )));
-            
-            
+
+
             // Verify if the uploaded file is an image, we allow only png, gif and jpeg format
             $inputFilter->add($factory->createInput(array(
                 'name' => 'photo',
@@ -268,8 +270,8 @@ class User extends Form {
                     ),
                 )
             )));
-            
-            
+
+
             // Does phone number match the requirements?
             $inputFilter->add($factory->createInput(array(
                 'name' => 'phone',
@@ -290,23 +292,24 @@ class User extends Form {
                     )
                 )
             )));
-            
+
             //...
             $this->filter = $inputFilter;
         }
-        
+
         return $this->filter;
-        
+
     }
-    
+
     /**
      * If we want to prohibit changes to the form`s new input filter just created,
      * we will have to override the setInputFilter method with the following
-     * 
+     *
      * @param InputFilterInterface $inputFilter
      * @throws Exception
      */
-    public function setInputFilter(InputFilterInterface $inputFilter) {
+    public function setInputFilter(InputFilterInterface $inputFilter)
+    {
         throw new Exception('It is not allowed to set the input filter');
     }
 

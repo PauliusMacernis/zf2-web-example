@@ -60,7 +60,7 @@ return array(
             'User\Service\Initializer\Db',
             'Debug\Service\Initializer\DbProfiler',
         )
-        
+
     ),
 //    'translator' => array(
 //        'locale' => 'en_US',

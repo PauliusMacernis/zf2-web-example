@@ -87,5 +87,5 @@ return array(
             'users' => 'User\Model\User',
         )
     )
-    
+
 );
