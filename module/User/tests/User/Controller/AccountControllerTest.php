@@ -1,6 +1,6 @@
 <?php
 
-namespace UserTest\Controller;
+namespace User\tests\User\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 

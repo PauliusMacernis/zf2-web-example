@@ -94,3 +94,5 @@ if ($exit) {
             "\n\tgit add <changed-file>\n" .
             "And try to commit the changes again.\n";
 }
+
+exit($exit);
