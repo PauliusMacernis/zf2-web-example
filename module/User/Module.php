@@ -21,7 +21,7 @@ class Module
         );
     }
 
-    public function onBootstrap(MvcEvent $e)
+    public function onBootstrap(MvcEvent $e)   
     {
         // existing code...
 
