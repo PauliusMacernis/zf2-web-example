@@ -57,6 +57,10 @@ return array(
         ),
         'invokables' => array(
             'table-gateway' => 'User\Service\Invokable\TableGateway',
+            'user-entity'   => 'User\Model\Entity\User',
+        ),
+        'shared' => array(
+            'user-entity'   => false,
         )
     ),
     'controllers' => array(
