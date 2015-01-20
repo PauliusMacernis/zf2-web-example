@@ -1,16 +1,91 @@
 <?php
 
 namespace User\Model\Entity;
+use Zend\Form\Annotation;
 
+/**
+ * @Annotation\Name("users")
+ * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ClassMethods")
+ * 
+ * @Entity @Table(name="users")
+ */
 class User {
 
+    /**
+     * @Annotation\Exclude()
+     * 
+     * @Id @GeneratedValue @Column(type="integer")
+     */
     protected $id;
-    protected $role;
-    protected $name;
+    
+    /**
+     * @Annotation\Type("Zend\Form\Element\Email")
+     * @Annotation\Options({"label":"Email:"})
+     * @Annotation\Attributes(
+     * {"type":"email","required":true,"placeholder":"Email Address..."})
+     * @Annotation\Filter({"name":"StripTags"})
+     * @Annotation\Filter({"name":"StringTrim"})
+     * @Annotation\Validator({"name":"EmailAddress","options":{"messages":{"emailAddressInvalidFormat":"Email address format is invalid"}}})
+     * @Annotation\Validator({"name":"NotEmpty","options":{"messages":{"isEmpty":"Email address is required"}}})
+     * @Annotation\Flags({"priority":"500"})
+     * @Column(type="string")
+     */
     protected $email;
+    
+    /**
+     * @Annotation\Type("Zend\Form\Element\Password")
+     * @Annotation\Options({"label":"Password:","priority":"400"})
+     * @Annotation\Attributes({"placeholder":"Password Here...","required":"required"})
+     * @Annotation\Filter({"name":"StripTags"})
+     * @Annotation\Filter({"name":"StringTrim"})
+     * @Annotation\Validator({"name":"NotEmpty","options":{"messages":{"isEmpty":"Password is required"}}})
+     * Annotation\Flags({"priority":"400"})
+     * @Column(type="string")
+     */
+    protected $password;
+    
+    
+    protected $role;
+    
+    /**
+     * @Annotation\Type("Zend\Form\Element\Text")
+     * @Annotation\Options({"label":"Name:"})
+     * @Annotation\Attributes({"placeholder":"Type name...","required":"required"})
+     * @Annotation\Filter({"name":"StripTags"})
+     * @Annotation\Filter({"name":"StringTrim"})
+     * @Annotation\Validator(
+     * {"name":"NotEmpty","options":{"messages":{"isEmpty":"Name is required"}}})
+     * @Column(type="string")
+     */
+    protected $name;
+        
+    /**
+     * @Annotation\Type("Zend\Form\Element\Text")
+     * @Annotation\Options({"label":"Phone number:"})
+     * @Annotation\Attributes(
+     * {"type":"tel","required":true,"pattern":"^[\d-/]+$"})
+     * @Annotation\Filter({"name":"StripTags"})
+     * @Annotation\Filter({"name":"StringTrim"})
+     * @Annotation\Filter({"name":"digits"})
+     * @Annotation\Validator(
+     * {"name":"RegEx","options":{"pattern":"/^[\d-\/]+$/"}})
+     * @Column(type="string")
+     */
     protected $phone;
+    
+    /**
+     * @Annotation\Type("Zend\Form\Element\File")
+     * @Annotation\Options({"label":"Your photo:"})
+     * @Annotation\Attributes({"required":"required","id":"photo"})
+     * @Annotation\Filter({"name":"filerenameupload","options":{"target":"data\/image\/photos\/","randomize":true}})
+     * @Annotation\Validator({"name":"filesize","options":{"max":2097152}})
+     * @Annotation\Validator({"name":"filemimetype","options":{"mimeType":"image\/png,image\/x-png,image\/jpg,image\/jpeg,image\/gif"}})
+     * @Annotation\Validator({"name":"fileimagesize","options":{"maxWidth":200,"maxHeight":200}})
+     * @Column(type="string")
+     */
     protected $photo;
 
+    
     /**
      * @return the $id
      */

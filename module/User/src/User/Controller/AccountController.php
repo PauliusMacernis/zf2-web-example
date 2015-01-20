@@ -3,9 +3,11 @@
 namespace User\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use User\Form\User as UserForm;
-use User\Model\User as UserModel;
+use Zend\EventManager\EventManager;
+use Zend\Form\Annotation\AnnotationBuilder;
 
+//use User\Form\User as UserForm;
+//use User\Model\User as UserModel;
 //use Zend\View\Model\ViewModel;
 
 class AccountController extends AbstractActionController
@@ -17,7 +19,45 @@ class AccountController extends AbstractActionController
 
     public function addAction()
     {
-        $form = new UserForm();
+        $builder = new AnnotationBuilder();
+        $entity = $this->serviceLocator->get('user-entity');
+        $form = $builder->createForm($entity);
+        
+        $form->add(array(
+                'name' => 'password_verify',
+                'type' => 'Zend\Form\Element\Password',
+                'attributes' => array(
+                    'placeholder' => 'Verify Password Here...',
+                    'required' => 'required',
+                ),
+                'options' => array(
+                    'label' => 'Verify Password',
+                )
+            ),
+            array(
+                'priority' => $form->get('password')->getOption('priority'),
+            )
+        );
+        
+        // This is the special code that protects our form from being submitted from automated scripts
+        $form->add(array(
+            'name' => 'csrf',
+            'type' => 'Zend\Form\Element\Csrf',
+        ));
+        
+        // This is the submit button
+        $form->add(array(
+            'name' => 'submit',
+            'type' => 'Zend\Form\Element\Submit',
+            'attributes' => array(
+                'value' => 'Submit',
+                'required' => 'false',
+            )
+        ));
+        
+        $form->bind($entity);        
+        
+        //$form = new UserForm();
         if ($this->getRequest()->isPost()) {
             $data = array_merge_recursive(
                     $this->getRequest()->getPost()->toArray(),
@@ -26,9 +66,14 @@ class AccountController extends AbstractActionController
             );
             $form->setData($data);
             if ($form->isValid()) {
+                $entityManager = $this->serviceLocator->get('entity-manager');
+                $entityManager->persist($entity); // save the data (almost)
+                $entityManager->flush(); // save the data (now)
+                
+
                 // save the data of the new user
-                $model = new UserModel();
-                $id = $model->insert($form->getData());
+                //$model = new UserModel();
+                //$id = $model->insert($form->getData());
 
                 // redirect the user to the view user action
                 return $this->redirect()->toRoute('user/default', array(
@@ -82,8 +127,13 @@ class AccountController extends AbstractActionController
         // $id = $this->params()->fromRoute('id'); // also works
         $id = $this->params('id'); // params from request: GET, POST, headers, routing.
         if ($id) {
-            $userModel = new UserModel();
-            $userModel->delete(array('id' => $id));
+            //$userModel = new UserModel();
+            //$userModel->delete(array('id' => $id));
+            $entityManager = $this->serviceLocator->get('entity-manager');
+            $userEntity = $this->serviceLocator->get('user-entity');
+            $userEntity->setId($id);
+            $entityManager->remove($userEntity);
+            $entityManager->flush();            
         } else {
             // external redirect (new request)
             return $this->redirect()->toRoute('user/default', array(// user/default is name of routes, not part of URL!
