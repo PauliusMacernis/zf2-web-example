@@ -27,23 +27,23 @@ class User {
      * @Annotation\Filter({"name":"StringTrim"})
      * @Annotation\Validator({"name":"EmailAddress","options":{"messages":{"emailAddressInvalidFormat":"Email address format is invalid"}}})
      * @Annotation\Validator({"name":"NotEmpty","options":{"messages":{"isEmpty":"Email address is required"}}})
-     * @Annotation\Flags({"priority":"500"})
+     * @Annotation\Flags({"priority":"1000"})
      * @Column(type="string")
      */
     protected $email;
     
     /**
      * @Annotation\Type("Zend\Form\Element\Password")
-     * @Annotation\Options({"label":"Password:","priority":"400"})
+     * @Annotation\Options({"label":"Password:","priority":"900"})
      * @Annotation\Attributes({"placeholder":"Password Here...","required":"required"})
      * @Annotation\Filter({"name":"StripTags"})
      * @Annotation\Filter({"name":"StringTrim"})
      * @Annotation\Validator({"name":"NotEmpty","options":{"messages":{"isEmpty":"Password is required"}}})
-     * Annotation\Flags({"priority":"400"})
+     * @Annotation\Flags({"priority":"900"})
      * @Column(type="string")
      */
     protected $password;
-    
+    // When form is generating then password_verify gets priority 800 (password priority - 100)
     
     protected $role;
     
@@ -55,6 +55,7 @@ class User {
      * @Annotation\Filter({"name":"StringTrim"})
      * @Annotation\Validator(
      * {"name":"NotEmpty","options":{"messages":{"isEmpty":"Name is required"}}})
+     * @Annotation\Flags({"priority":"700"})
      * @Column(type="string")
      */
     protected $name;
@@ -69,6 +70,7 @@ class User {
      * @Annotation\Filter({"name":"digits"})
      * @Annotation\Validator(
      * {"name":"RegEx","options":{"pattern":"/^[\d-\/]+$/"}})
+     * @Annotation\Flags({"priority":"600"})
      * @Column(type="string")
      */
     protected $phone;
@@ -81,6 +83,7 @@ class User {
      * @Annotation\Validator({"name":"filesize","options":{"max":2097152}})
      * @Annotation\Validator({"name":"filemimetype","options":{"mimeType":"image\/png,image\/x-png,image\/jpg,image\/jpeg,image\/gif"}})
      * @Annotation\Validator({"name":"fileimagesize","options":{"maxWidth":200,"maxHeight":200}})
+     * @Annotation\Flags({"priority":"500"})
      * @Column(type="string")
      */
     protected $photo;

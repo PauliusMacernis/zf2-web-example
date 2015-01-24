@@ -35,7 +35,7 @@ class AccountController extends AbstractActionController
                 )
             ),
             array(
-                'priority' => $form->get('password')->getOption('priority'),
+                'priority' => ($form->get('password')->getOption('priority') - 100),
             )
         );
         
