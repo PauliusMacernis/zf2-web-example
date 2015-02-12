@@ -3,18 +3,29 @@
 namespace User\Model;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 // ...
 
 class UserManager implements ServiceLocatorAwareInterface {
     
+    /**
+     * @var ServiceLocatorInterface
+     */
+    protected $services;
     
+    /* (non-PHPdoc)
+     * @see \Zend\ServiceManager\ServiceLocatorAwareInterface::getServiceLocator()
+     */
     public function getServiceLocator() {
-        
+        return $this->services;
     }
 
-    public function setServiceLocator(\Zend\ServiceManager\ServiceLocatorInterface $serviceLocator) {
-        
+    /* (non-PHPdoc)
+     * @see \Zend\ServiceManager\ServiceLocatorAwareInterface::setServiceLocator()
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {
+        $this->services = $serviceLocator;
     }
     
     /**

@@ -219,7 +219,7 @@ class User extends Form
                 )
             )));
             */
-            
+            /*
             // Verify the password is confirmed correctly
             $inputFilter->add($factory->createInput(array(
                 'name' => 'password_verify',
@@ -240,7 +240,7 @@ class User extends Form
                     )
                 )
             )));
-
+            */
             /*
             // Verify if the uploaded file is an image, we allow only png, gif and jpeg format
             $inputFilter->add($factory->createInput(array(

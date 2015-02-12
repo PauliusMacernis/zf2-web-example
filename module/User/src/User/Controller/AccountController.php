@@ -21,6 +21,7 @@ class AccountController extends AbstractActionController
     {
         $builder = new AnnotationBuilder();
         $entity = $this->serviceLocator->get('user-entity');
+        //var_dump($entity);
         $form = $builder->createForm($entity);
         
         $form->add(array(
@@ -32,6 +33,22 @@ class AccountController extends AbstractActionController
                 ),
                 'options' => array(
                     'label' => 'Verify Password',
+                ),
+                'filters' => array(
+                    array(
+                        'name' => 'StripTags'
+                    ),
+                    array(
+                        'name' => 'StringTrim'
+                    )
+                ),
+                'validators' => array(
+                    array(
+                        'name' => 'identical',
+                        'options' => array(
+                            'token' => 'password'
+                        )
+                    )
                 )
             ),
             array(
@@ -55,6 +72,10 @@ class AccountController extends AbstractActionController
             )
         ));
         
+        // We bind the entity to the user. If the form tries to read/write data from/to the entity
+        // it will use the hydrator specified in the entity to achieve this. In our case we use ClassMethods
+        // hydrator which means that reading will happen calling the getter methods and writing will happen by
+        // calling the setter methods.
         $form->bind($entity);        
         
         //$form = new UserForm();
@@ -66,10 +87,17 @@ class AccountController extends AbstractActionController
             );
             $form->setData($data);
             if ($form->isValid()) {
+                // We use now the Doctrine 2 entity manager to save user data to the database
                 $entityManager = $this->serviceLocator->get('entity-manager');
                 $entityManager->persist($entity); // save the data (almost)
                 $entityManager->flush(); // save the data (now)
                 
+                $this->flashmessenger()->addSuccessMessage('User was added successfully.');
+
+                $event = new EventManager('user');
+                $event->trigger('register', $this, array(
+                    'user'=> $entity,
+                ));
 
                 // save the data of the new user
                 //$model = new UserModel();
@@ -79,7 +107,7 @@ class AccountController extends AbstractActionController
                 return $this->redirect()->toRoute('user/default', array(
                             'controller' => 'account',
                             'action' => 'view',
-                            'id' => $id
+                            'id' => $entity->getId()
                 ));
             }
         }

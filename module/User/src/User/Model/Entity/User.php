@@ -79,9 +79,9 @@ class User {
      * @Annotation\Type("Zend\Form\Element\File")
      * @Annotation\Options({"label":"Your photo:"})
      * @Annotation\Attributes({"required":"required","id":"photo"})
-     * @Annotation\Filter({"name":"filerenameupload","options":{"target":"data\/image\/photos\/","randomize":true}})
+     * @Annotation\Filter({"name":"filerenameupload","options":{"target":"data/image/photos/","randomize":true}})
      * @Annotation\Validator({"name":"filesize","options":{"max":2097152}})
-     * @Annotation\Validator({"name":"filemimetype","options":{"mimeType":"image\/png,image\/x-png,image\/jpg,image\/jpeg,image\/gif"}})
+     * @Annotation\Validator({"name":"filemimetype","options":{"mimeType":"image/png,image/x-png,image/jpg,image/jpeg,image/gif"}})
      * @Annotation\Validator({"name":"fileimagesize","options":{"maxWidth":200,"maxHeight":200}})
      * @Annotation\Flags({"priority":"500"})
      * @Column(type="string")
@@ -118,31 +118,31 @@ class User {
     }
 
     /**
-     * @param filed_type $id
+     * @param field_type $id
      */
     public function setId($id) {
-        return $this->id = $id;
+        $this->id = $id;
     }
 
     /**
-     * @param fiel_type $role
+     * @param field_type $role
      */
     public function setRole($role) {
-        return $this->role = $role;
+        $this->role = $role;
     }
 
     /**
-     * @param fiel_type $email
+     * @param field_type $email
      */
     public function setEmail($email) {
-        return $this->email = $email;
+        $this->email = $email;
     }
 
     /**
-     * @param fiel_type $phone
+     * @param field_type $phone
      */
     public function setPhone($phone) {
-        return $this->phone = $phone;
+        $this->phone = $phone;
     }
 
     /**
@@ -153,10 +153,10 @@ class User {
     }
 
     /**
-     * @param fiel_type $name
+     * @param field_type $name
      */
     public function setName($name) {
-        return $this->name = $name;
+        $this->name = $name;
     }
 
     public function getPhoto() {
@@ -164,7 +164,9 @@ class User {
     }
 
     public function setPhoto($photo) {
-        return $this->photo = $photo;
+        if(isset($photo['tmp_name'])) {
+            $this->photo = $photo['tmp_name'];
+        }
     }
 
     /**
@@ -186,7 +188,7 @@ class User {
     }
 
     /**
-     * Verifies if the password match
+     * Verifies if the passwords match
      * 
      * @param string $password
      * @return boolean
