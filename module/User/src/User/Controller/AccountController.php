@@ -5,10 +5,7 @@ namespace User\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\EventManager\EventManager;
 use Zend\Form\Annotation\AnnotationBuilder;
-
-//use User\Form\User as UserForm;
-//use User\Model\User as UserModel;
-//use Zend\View\Model\ViewModel;
+use User\Form\PasswordVerifyFilter;
 
 class AccountController extends AbstractActionController
 {
@@ -21,9 +18,9 @@ class AccountController extends AbstractActionController
     {
         $builder = new AnnotationBuilder();
         $entity = $this->serviceLocator->get('user-entity');
-        //var_dump($entity);
         $form = $builder->createForm($entity);
         
+        // password_verify - html form
         $form->add(array(
                 'name' => 'password_verify',
                 'type' => 'Zend\Form\Element\Password',
@@ -34,7 +31,16 @@ class AccountController extends AbstractActionController
                 'options' => array(
                     'label' => 'Verify Password',
                 ),
-                'filters' => array(
+            ),
+            array(
+                'priority' => ($form->get('password')->getOption('priority') - 100),
+            )
+        );
+        // password_verify - filers and validators
+        $form->getInputFilter()->add(array(
+            'name' => 'password_verify',
+            'required' => true,
+            'filters' => array(
                     array(
                         'name' => 'StripTags'
                     ),
@@ -42,20 +48,23 @@ class AccountController extends AbstractActionController
                         'name' => 'StringTrim'
                     )
                 ),
-                'validators' => array(
+            'validators' => array(
                     array(
                         'name' => 'identical',
                         'options' => array(
                             'token' => 'password'
+                        )),
+                    array(
+                        'name' => 'NotEmpty',
+                        'options' => array(
+                            'messages' => array(
+                                'isEmpty' => 'Repeated password is required'
+                            )
                         )
                     )
                 )
-            ),
-            array(
-                'priority' => ($form->get('password')->getOption('priority') - 100),
-            )
-        );
-        
+            ));
+                
         // This is the special code that protects our form from being submitted from automated scripts
         $form->add(array(
             'name' => 'csrf',
@@ -98,11 +107,7 @@ class AccountController extends AbstractActionController
                 $event->trigger('register', $this, array(
                     'user'=> $entity,
                 ));
-
-                // save the data of the new user
-                //$model = new UserModel();
-                //$id = $model->insert($form->getData());
-
+                
                 // redirect the user to the view user action
                 return $this->redirect()->toRoute('user/default', array(
                             'controller' => 'account',
