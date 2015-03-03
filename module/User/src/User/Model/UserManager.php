@@ -55,5 +55,21 @@ class UserManager implements ServiceLocatorAwareInterface {
         return $user;
         
     }
+    
+    /**
+     * Creates and fills the user entity identified by user id.
+     * @param string $identity
+     * @return Entity\User
+     */
+    public function createById($identity) {
+        $user = $this->services->get('user-entity');
+        $entityManager = $this->services->get('entity-manager');
+        
+        return $entityManager->getRepository(get_class($user))
+                ->findOneById($identity);
+        
+        
+    }
+    
 
 }

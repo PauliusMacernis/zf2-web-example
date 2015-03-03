@@ -41,6 +41,12 @@ class EntityManager implements FactoryInterface {
             }
         }
         
+        // attach profiler to the entity manager
+        if($serviceLocator->has('doctrine-profiler')) {
+            $profiler = $serviceLocator->get('doctrine-profiler');
+            $entityManager->getConfiguration()->setSQLLogger($profiler);
+        }
+        
         return $entityManager;
         
     }

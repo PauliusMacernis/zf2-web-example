@@ -102,11 +102,13 @@ class AccountController extends AbstractActionController
                 $entityManager->flush(); // save the data (now)
                 
                 $this->flashmessenger()->addSuccessMessage('User was added successfully.');
-
+                
+                /* This is how we could pass the entity to event triggers
                 $event = new EventManager('user');
                 $event->trigger('register', $this, array(
                     'user'=> $entity,
                 ));
+                */
                 
                 // redirect the user to the view user action
                 return $this->redirect()->toRoute('user/default', array(
@@ -146,7 +148,13 @@ class AccountController extends AbstractActionController
 
     public function viewAction()
     {
-        return array();
+        
+        $id = $this->params('id'); // params from request: GET, POST, headers, routing.
+        $UserManager = $this->getServiceLocator()->get('user-manager');
+        
+        $entity = $UserManager->createById($id);
+        
+        return array('userName' => $entity->getName());
     }
 
     public function editAction()
