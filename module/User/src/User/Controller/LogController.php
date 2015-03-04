@@ -2,6 +2,7 @@
 namespace User\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\EventManager\EventManager;
 
 class LogController extends AbstractActionController
 {
@@ -33,7 +34,10 @@ class LogController extends AbstractActionController
             ));
 
         } else {
-            // @todo: report some errors
+
+            $event = new EventManager('user');
+            $event->trigger('log-fail', $this, array('username' => $username));
+
             $this->flashMessenger()->addErrorMessage('Sorry, problems detected...');
         }
 

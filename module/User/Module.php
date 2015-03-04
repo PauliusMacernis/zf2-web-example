@@ -34,6 +34,26 @@ class Module
         $eventManager = $e->getApplication()->getEventManager();
         $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'protectPage'), -100);
 
+        $sharedEventManager = $eventManager->getSharedManager();
+
+        // Attach logger to log-fail of user
+        $sharedEventManager->attach('user', 'log-fail', function($event) use ($services) {
+            $username = $event->getParam('username');
+            $log = $services->get('log');
+            // This is shorthand form of this:
+            // $log->log(Zend\Log\Logger::WARN, 'Error logging user [' . $username . ']')
+            $log->warn('Error logging user [' . $username . ']');
+        });
+
+        // Attach logger to register of user
+        $sharedEventManager->attach('user', 'register', function($event) use ($services) {
+            $user = $event->getParam('user');
+            $log = $services->get('log');
+            // This is shorthand form of this:
+            // $log->log(Zend\Log\Logger::WARN, 'Error logging user [' . $username . ']')
+            $log->warn('Registered user [' . $user->getName() . '/' . $user->getId() . ']');
+        });
+
     }
 
     public function protectPage(MvcEvent $e)

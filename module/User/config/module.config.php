@@ -55,6 +55,7 @@ return array(
         'factories' => array(
             'database' => 'User\Service\Factory\Database',
             'entity-manager' => 'User\Service\Factory\EntityManager',
+            'log' => 'User\Service\Factory\Log',
         ),
         'invokables' => array(
             'table-gateway' => 'User\Service\Invokable\TableGateway',

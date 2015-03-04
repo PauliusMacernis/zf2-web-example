@@ -16,6 +16,16 @@ class AccountController extends AbstractActionController
 
     public function addAction()
     {
+
+        // TEST
+        $log = $this->getServiceLocator()->get('log');
+        //$log = $services->get('log');
+        // This is shorthand form of this:
+        // $log->log(Zend\Log\Logger::WARN, 'Error logging user [' . $username . ']')
+        $log->warn('addAction - test...');
+        // END. TEST.
+
+
         $builder = new AnnotationBuilder();
         $entity = $this->serviceLocator->get('user-entity');
         $form = $builder->createForm($entity);
@@ -109,6 +119,10 @@ class AccountController extends AbstractActionController
                     'user'=> $entity,
                 ));
                 */
+                // Log user registered
+                $event = new EventManager('user');
+                $event->trigger('register', $this, array('user' => $entity));
+
                 
                 // redirect the user to the view user action
                 return $this->redirect()->toRoute('user/default', array(
