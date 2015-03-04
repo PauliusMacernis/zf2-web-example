@@ -17,15 +17,6 @@ class AccountController extends AbstractActionController
     public function addAction()
     {
 
-        // TEST
-        $log = $this->getServiceLocator()->get('log');
-        //$log = $services->get('log');
-        // This is shorthand form of this:
-        // $log->log(Zend\Log\Logger::WARN, 'Error logging user [' . $username . ']')
-        $log->warn('addAction - test...');
-        // END. TEST.
-
-
         $builder = new AnnotationBuilder();
         $entity = $this->serviceLocator->get('user-entity');
         $form = $builder->createForm($entity);
@@ -162,7 +153,7 @@ class AccountController extends AbstractActionController
 
     public function viewAction()
     {
-        
+
         $id = $this->params('id'); // params from request: GET, POST, headers, routing.
         $UserManager = $this->getServiceLocator()->get('user-manager');
         
