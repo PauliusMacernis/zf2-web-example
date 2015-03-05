@@ -27,7 +27,9 @@ class Log implements FactoryInterface {
         // To start logging we need to create an instance of Zend\Log\Logger
         $log = new Logger();
         // And we must add to the logger at least one writer
-        // @todo: make sure php://stderr stream is working properly
+        // @todo: make sure php://stderr stream is enough for this purpose. Maybe other stream should be used instead?
+        //  More info about php://stderr stream behaviour could be found here:
+        //  http://stackoverflow.com/questions/13830285/writing-to-php-stderr/28887890#28887890
         $writer = new StreamWriter('php://stderr');
         $log->addWriter($writer);
 
