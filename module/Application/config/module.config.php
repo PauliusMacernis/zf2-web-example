@@ -57,9 +57,12 @@ return array(
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory',
         ),
+        'factories' => array(
+            'cipher' => 'Application\Service\Factory\SymmetricCipher',
+        ),
         'aliases' => array(
             'translator' => 'MvcTranslator',
-        ),
+        )
     ),
     'translator' => array(
         'locale' => 'en_US',

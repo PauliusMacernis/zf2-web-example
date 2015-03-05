@@ -31,7 +31,7 @@ class EntityManager implements FactoryInterface {
         $doctrineConfig = Setup::createAnnotationMetadataConfiguration($config['doctrine']['entity_path'], true);
         $entityManager = DoctrineEntityManager::create($doctrineDbConfig, $doctrineConfig);
         
-        
+
         if(isset($config['doctrine']['initializers'])) {
             $eventManager = $entityManager->getEventManager();
             

@@ -56,12 +56,16 @@ return array(
             'database' => 'User\Service\Factory\Database',
             'entity-manager' => 'User\Service\Factory\EntityManager',
             'log' => 'User\Service\Factory\Log',
+            'password-adapter' => 'User\Service\Factory\PasswordAdapter',
         ),
         'invokables' => array(
             'table-gateway' => 'User\Service\Invokable\TableGateway',
             'user-entity'   => 'User\Model\Entity\User',
             'user-manager'  => 'User\Model\UserManager',
             'doctrine-profiler' => 'User\Service\Invokable\DoctrineProfiler',
+        ),
+        'initializers' => array(
+            'password-init' => 'User\Service\Initializer\Password'
         ),
         'shared' => array(
             'user-entity'   => false,
@@ -100,7 +104,8 @@ return array(
             __DIR__ . '/../src/User/Model/Entity/',
         ),
         'initializers' => array(
-            // add here the list of initializers for Doctrine 2 entities
+            // add here the list of initializers for Doctrine 2 entities...
+            'password-init' => 'User\Service\Initializer\Password'
         ),
     )
     
