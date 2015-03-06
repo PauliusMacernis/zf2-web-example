@@ -57,12 +57,15 @@ return array(
             'entity-manager' => 'User\Service\Factory\EntityManager',
             'log' => 'User\Service\Factory\Log',
             'password-adapter' => 'User\Service\Factory\PasswordAdapter',
+            'auth' => 'User\Service\Factory\Authentication', // todo: make sure this is needed and is used in the right way
+            //'auth-adapter' => 'User\Service\Factory\AuthenticationDbAdapter'
         ),
         'invokables' => array(
             'table-gateway' => 'User\Service\Invokable\TableGateway',
             'user-entity'   => 'User\Model\Entity\User',
             'user-manager'  => 'User\Model\UserManager',
             'doctrine-profiler' => 'User\Service\Invokable\DoctrineProfiler',
+            'auth-adapter' => 'User\Authentication\Adapter', // No need to create a separate factory class, ZF2 has it
         ),
         'initializers' => array(
             'password-init' => 'User\Service\Initializer\Password'

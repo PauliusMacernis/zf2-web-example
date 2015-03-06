@@ -193,7 +193,9 @@ class AccountController extends AbstractActionController
 
     public function meAction()
     {
-        return array();
+        // @todo: is this solution good enough to get data of authenticated user? Maybe there is the better way?
+        $auth = $this->getServiceLocator()->get('auth');
+        return array('userName' => $auth->getIdentity()->getName());
     }
 
     public function deniedAction()

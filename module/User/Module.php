@@ -56,9 +56,10 @@ class Module
 
     }
 
-    public function protectPage(MvcEvent $e)
+    public function protectPage(MvcEvent $event)
     {
-        $match = $e->getRouteMatch(); // use RouteMatch object to get the name of the controller, action, and other parameters
+        $match = $event->getRouteMatch(); // use RouteMatch object to get the name of the controller
+            //, action, and other parameters
 
         if(!$match) {
             // we cannot do anything without a resolved route
@@ -68,7 +69,28 @@ class Module
         $controller = $match->getParam('controller');
         $action     = $match->getParam('action');
         $namespace  = $match->getParam('__NAMESPACE__');
-        // ...
+
+        // Limit the execution of redirect to the current module only
+        if(strpos($namespace, __NAMESPACE__) !== 0) {
+            return;
+        } elseif( // Also, let such user to login or add (aka. register)
+            strpos($namespace, __NAMESPACE__) === 0
+            && in_array($controller, array('User\Controller\Account'))
+            && in_array($action,     array('register', 'add'))
+        ) {
+            return;
+        }
+
+        $services = $event->getApplication()->getServiceManager();
+
+        $auth = $services->get('auth');
+        if(!$auth->hasIdentity()) {
+            // Set the response code to HTTP 401: Auth Required
+            $response = $event->getResponse();
+            $response->setStatusCode(401);
+            $match->setParam('controller', 'User\Controller\Log');
+            $match->setParam('action', 'in');
+        }
 
     }
 
