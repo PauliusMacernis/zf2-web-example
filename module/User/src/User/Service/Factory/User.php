@@ -18,7 +18,7 @@ class User implements FactoryInterface {
 
         if($auth->hasIdentity()) {
             $user = $auth->getIdentity();
-            if($user->getRole()) {
+            if(!$user->getRole()) {
                 $user->setRole($config['acl']['defaults']['member_role']);
             }
         } else {

@@ -110,10 +110,8 @@ class Module
         if(isset($resourceAliases[$controller])) {
             $resource = $resourceAliases[$controller];
         } else {
-            $resource = strtolower(substr($controller, strpos($controller, '\\') + 1));
+            $resource = strtolower(substr($controller, strrpos($controller, '\\') + 1));
         }
-
-        var_dump($resource, $currentUser, $role, $acl->hasResource($resource));
 
         // If a resource is not in the ACL add it
         if(!$acl->hasResource($resource)) {

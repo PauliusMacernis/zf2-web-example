@@ -142,7 +142,6 @@ return array(
         ),
         'resource_aliases' => array(
             'User\Controller\Account' => 'account',
-            //'User\Controller\Log' => 'log',
         ),
         // List of modules to apply the ACL
         // This is how we can specify if we have to protect the pages in our current module.
