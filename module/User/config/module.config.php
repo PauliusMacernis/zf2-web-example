@@ -58,7 +58,9 @@ return array(
             'log' => 'User\Service\Factory\Log',
             'password-adapter' => 'User\Service\Factory\PasswordAdapter',
             'auth' => 'User\Service\Factory\Authentication', // todo: make sure this is needed and is used in the right way
-            //'auth-adapter' => 'User\Service\Factory\AuthenticationDbAdapter'
+            //'auth-adapter' => 'User\Service\Factory\AuthenticationDbAdapter',
+            'acl' => 'User\Service\Factory\Acl',
+            'user' => 'User\Service\Factory\User',
         ),
         'invokables' => array(
             'table-gateway' => 'User\Service\Invokable\TableGateway',
@@ -110,6 +112,43 @@ return array(
             // add here the list of initializers for Doctrine 2 entities...
             'password-init' => 'User\Service\Initializer\Password'
         ),
+    ),
+    'acl' => array(
+        'role' => array(
+            // role -> multiple parents
+            'guest' => null,
+            'member' => array('guest'),
+            'admin' => null,
+        ),
+        'resource' => array(
+            // resource ->single parent
+            'account' => null,
+            'log' => null,
+        ),
+        'allow' => array(
+            // array('role', 'resource', array('permission-1', 'permission-2', ...)),
+            array('guest', 'log', 'in'),
+            array('guest', 'account', 'register'),
+            array('member', 'account', array('me')), // the member can only see his account,
+            array('member', 'log', 'out'), // the member can log out
+            array('admin', null, null), // the admin can do anything with the accounts
+        ),
+        'deny' => array(
+            array('guest', null, 'delete') // null as second parameter means all resources
+        ),
+        'defaults' => array(
+            'guest_role' => 'guest',
+            'member_role' => 'member',
+        ),
+        'resource_aliases' => array(
+            'User\Controller\Account' => 'account',
+            //'User\Controller\Log' => 'log',
+        ),
+        // List of modules to apply the ACL
+        // This is how we can specify if we have to protect the pages in our current module.
+        'modules' => array(
+            'User'
+        )
     )
     
 

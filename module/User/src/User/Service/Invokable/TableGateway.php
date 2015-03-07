@@ -47,7 +47,7 @@ class TableGateway implements ServiceLocatorAwareInterface
      */
     public function getServiceLocator()
     {
-        $this->serviceLocator;
+        return $this->serviceLocator;
     }
 
     /* (non-PHPdoc)
