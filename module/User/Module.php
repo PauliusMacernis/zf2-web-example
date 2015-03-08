@@ -79,18 +79,23 @@ class Module
         $services = $event->getApplication()->getServiceManager();
         $config = $services->get('config');
 
-        // check if the current module wants to use the ACL
-        $aclModules = $config['acl']['modules'];
-        if(!empty($aclModules) && !in_array($moduleNamespace, $aclModules)) {
-            return;
-        }
-
         $auth = $services->get('auth');
         $acl = $services->get('acl');
 
         // get the role of the current user
         $currentUser = $services->get('user');
         $role = $currentUser->getRole();
+
+        // This is how we add default acl and role to the navigation view helpers
+        \Zend\View\Helper\Navigation\AbstractHelper::setDefaultAcl($acl);
+        \Zend\View\Helper\Navigation\AbstractHelper::setDefaultRole($role);
+
+        // check if the current module wants to use the ACL
+        $aclModules = $config['acl']['modules'];
+        if(!empty($aclModules) && !in_array($moduleNamespace, $aclModules)) {
+            return;
+        }
+
 
         /* @todo: Make sure the following commented part is not needed anymore. If so then remove it.
         // setup default roles for the current user

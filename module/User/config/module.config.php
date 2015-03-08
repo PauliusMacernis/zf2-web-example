@@ -117,7 +117,7 @@ return array(
         'role' => array(
             // role -> multiple parents
             'guest' => null,
-            'member' => array('guest'),
+            'member' => null, //array('guest'), <- commented to not extend from guest
             'admin' => null,
         ),
         'resource' => array(
@@ -148,7 +148,59 @@ return array(
         'modules' => array(
             'User'
         )
-    )
+    ),
+    'navigation' => array(
+        'default' => array(
+            array(
+                'label' => 'User',
+                'route' => 'user/default',
+                'controller' => 'account',
+                'pages' => array(
+                    array(
+                        'label' => 'Me',
+                        // uri
+                        'route' => 'user/default',
+                        'controller' => 'account',
+                        'action' => 'me',
+                        // acl
+                        'resource' => 'account',
+                        'privilege' => 'me',
+                    ),
+                    array(
+                        'label' => 'Log in',
+                        // uri
+                        'route' => 'user/default',
+                        'controller' => 'log',
+                        'action' => 'in',
+                        // acl
+                        'resource' => 'log',
+                        'privilege' => 'in',
+                    ),
+                    array(
+                        'label' => 'Register',
+                        // uri
+                        'route' => 'user/default',
+                        'controller' => 'account',
+                        'action' => 'register',
+                        // acl
+                        'resource' => 'account',
+                        'privilege' => 'register',
+
+                    ),
+                    array(
+                        'label' => 'Log out',
+                        // uri
+                        'route' => 'user/default',
+                        'controller' => 'log',
+                        'action' => 'out',
+                        // acl
+                        'resource' => 'log',
+                        'privilege' => 'out',
+                    )
+                )
+            )
+        ),
+    ),
     
 
 );

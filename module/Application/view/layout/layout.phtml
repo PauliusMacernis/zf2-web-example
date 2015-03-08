@@ -38,17 +38,71 @@
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
+                        <?php
+
+                        $navHelper = $this->navigation('navigation');
+                        $containers = $navHelper->getContainer();
+
+                        foreach($containers->getPages() as $page) {
+
+                            $class = "";
+                            if($page->isActive()) {
+                                $class = "active";
+                            }
+
+                            if(count($page)) {
+                                // if there are subpages we render the menu a bit different
+                                $label = $page->getLabel();
+                                $label = $this->translate($label); // translated label
+                                $label = $this->escapehtml($label); // sanitized label
+                                printf('<li class="dropdown%s">' . "\n",
+                                    ($class ? (' ' . $class) : '')
+                                );
+                                printf(' <a href="%s" class="dropdown-toggle" data-toggle="dropdown">%s<b class="caret"></b></a>' . "\n",
+                                    $page->getHref(),
+                                    $label
+                                );
+                                echo '<ul class="dropdown-menu">' . "\n";
+                                foreach($page as $subPage) {
+                                    if (!$navHelper->accept($subPage)) {
+                                        continue;
+                                    }
+                                    printf("<li>%s</li>\n",
+                                        $navHelper->htmlify($subPage)
+                                    );
+                                }
+                                echo "</ul></li>\n";
+
+                            } else {
+                                printf("<li class=\"%s\">%s</li>\n",
+                                    $class,
+                                    $navHelper->htmlify($page)
+                                );
+                            }
+
+                        }
+
+                        ?><!--
                         <li class="active"><a href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Home') ?></a></li>
                         <li class="active"><a href="<?php echo $this->url('user/default', array('controller' => 'account', 'action' => 'register')) ?>"><?php echo $this->translate('Register') ?></a></li>
                         <li class="active"><a href="<?php echo $this->url('user/default', array('controller' => 'log', 'action' => 'in')) ?>"><?php echo $this->translate('Log in') ?></a></li>
                         <li class="active"><a href="<?php echo $this->url('user/default', array('controller' => 'log', 'action' => 'out')) ?>"><?php echo $this->translate('Log out') ?></a></li>
                         <li class="active"><a href="<?php echo $this->url('user/default', array('controller' => 'account', 'action' => 'me')) ?>"><?php echo $this->translate('My Profile') ?></a></li>
+                        -->
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
         </nav>
+        <div class="breadcrumb">
+            <!-- Breadcrumb navigation -->
+            <?php
+
+            echo $this->navigation('navigation')->breadcrumbs()->setMinDepth(1)->setSeparator('&#10151;' . PHP_EOL);
+
+            ?>
+        </div>
+
         <?php
-        
         $namespaces = array('error', 'success', 'info', 'default');
         foreach ($namespaces as $namespace) {
             $flashMessages = $this->flashMessenger()->render($namespace);

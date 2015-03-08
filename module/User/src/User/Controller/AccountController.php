@@ -64,7 +64,7 @@ class AccountController extends AbstractActionController
                         )
                     )
                 )
-            ));
+        ));
                 
         // This is the special code that protects our form from being submitted from automated scripts
         $form->add(array(

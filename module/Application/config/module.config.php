@@ -59,6 +59,7 @@ return array(
         ),
         'factories' => array(
             'cipher' => 'Application\Service\Factory\SymmetricCipher',
+            'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
         ),
         'aliases' => array(
             'translator' => 'MvcTranslator',
@@ -105,5 +106,25 @@ return array(
     'application' => array(
         'version'   => '[0.0.2]',
         'name'      => '[Application name]'
-    )
+    ),
+    'navigation' => array(
+        'default' => array(
+            array(
+                'label' => 'Home',
+                'route' => 'home',
+                'pages' => array(
+                    array(
+                        'label' => 'About',
+                        'route' => 'application/default',
+                        'controller' => 'index',
+                        'action' => 'about'
+                    ),
+                    //array(
+                    //    'label' => 'Book',
+                    //    'uri' => 'http://learnzf2.com',
+                    //)
+                )
+            )
+        )
+    ),
 );
