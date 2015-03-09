@@ -9,7 +9,8 @@ return array(
     'modules' => array(
         'Application',
         //'Debug',
-        'User'
+        'User',
+        'Exam'
         ),
     'module_listener_options' => array(
         'module_paths' => array(
