@@ -66,11 +66,12 @@ return array(
             'table-gateway' => 'User\Service\Invokable\TableGateway',
             'user-entity'   => 'User\Model\Entity\User',
             'user-manager'  => 'User\Model\UserManager',
-            'doctrine-profiler' => 'User\Service\Invokable\DoctrineProfiler',
+            //'doctrine-profiler' => 'User\Service\Invokable\DoctrineProfiler', <-- moved to Debug module
             'auth-adapter' => 'User\Authentication\Adapter', // No need to create a separate factory class, ZF2 has it
         ),
         'initializers' => array(
-            'password-init' => 'User\Service\Initializer\Password'
+            'password-init' => 'User\Service\Initializer\Password',
+            'User\Service\Initializer\Db',
         ),
         'shared' => array(
             'user-entity'   => false,

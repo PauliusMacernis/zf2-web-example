@@ -52,12 +52,12 @@ return array(
         ),
         'invokables' => array(
             //'timer' => 'Debug\Service\Timer'
+            'doctrine-profiler' => 'Debug\Service\Invokable\DoctrineProfiler', //<-- moved from User module
         ),
         'aliases' => array(
             'Debug\Timer' => 'timer',
         ),
         'initializers' => array(
-            'User\Service\Initializer\Db',
             'Debug\Service\Initializer\DbProfiler',
         )
 
