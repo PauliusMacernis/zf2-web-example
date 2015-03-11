@@ -1,7 +1,7 @@
 <?php
 namespace Exam\Model;
 
-use Zend\Http\Client\Adapter\Test;
+//use Zend\Http\Client\Adapter\Test;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Form\Factory as FormFactory;

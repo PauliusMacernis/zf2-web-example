@@ -97,19 +97,20 @@
         </div>
 
         <?php
+
         $namespaces = array('error', 'success', 'info', 'default');
         foreach ($namespaces as $namespace) {
-            $flashMessages = $this->flashMessenger()->render($namespace);
-            if(!empty($flashMessages)) {
+            $flashMessages = $this->flashMessenger()->renderCurrent($namespace);
+            if (!empty($flashMessages)) {
                 ?>
                 <div id="myAlert" class="alert alert-<?= $namespace ?>" data-alert="alert">
                     <a class="close" data-dismiss="alert">x</a>
                     <?= $flashMessages ?>
                 </div>
-                <?php
+            <?php
             }
         }
-        
+
         ?>
         <div class="container">
             <?php echo $this->content; ?>

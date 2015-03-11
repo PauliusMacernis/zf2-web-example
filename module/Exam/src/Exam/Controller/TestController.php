@@ -71,7 +71,8 @@ class TestController extends AbstractActionController
                     }
                 }
                 $percents = $correct * 100 / $total;
-                $this->flashMessenger()->addInfoMessage(sprintf('You are %s% correct.', $percents));
+                $message = sprintf('You are %d%s correct.', $percents, '%');
+                $this->flashMessenger()->addInfoMessage($message);
             }
         }
 

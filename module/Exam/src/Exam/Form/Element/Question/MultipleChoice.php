@@ -87,7 +87,7 @@ class MultipleChoice extends MultiCheckbox implements QuestionInterface {
             $answers = $this->getAnswers();
             // Example: Custom Validator Via Callback
             $this->validator = new Callback(function($value) use ($answers) {
-                $diff = array_diff($answers, $value);
+                $diff = array_diff((array)$answers, (array)$value);
                 if(!empty($diff)) {
                     return false;
                 }

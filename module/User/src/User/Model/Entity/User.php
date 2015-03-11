@@ -53,7 +53,11 @@ class User implements PasswordAwareInterface {
      */
     protected $password;
     // When form is generating then password_verify gets priority 800 (password priority - 100)
-    
+
+    /**
+     * @Annotation\Exclude()
+     * @Column(type="string")
+     */
     protected $role;
     
     /**

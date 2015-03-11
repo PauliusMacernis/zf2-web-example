@@ -158,7 +158,7 @@ class AccountController extends AbstractActionController
         $UserManager = $this->getServiceLocator()->get('user-manager');
         
         $entity = $UserManager->createById($id);
-        
+
         return array('userName' => $entity->getName());
     }
 
@@ -196,7 +196,11 @@ class AccountController extends AbstractActionController
         // @todo: is this solution good enough to get data of authenticated user? Maybe there is the better way?
         // $auth = $this->getServiceLocator()->get('auth');
         $currentUser = $this->getServiceLocator()->get('user');
-        return array('userName' => $currentUser->getName());
+        return array(
+            'userName' => $currentUser->getName(),
+            'userRole' => $currentUser->getRole(),
+            'userEmail' => $currentUser->getEmail(),
+        );
     }
 
     public function deniedAction()
