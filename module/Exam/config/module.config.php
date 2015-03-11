@@ -43,6 +43,16 @@ return array(
                             ),
                         ),
                     ),
+                    'list' => array(
+                        'type' => 'Literal',
+                        'options' => array(
+                            'route' => '/test/list',
+                            'defaults' => array(
+                                'controller' => 'Test',
+                                'action' => 'list',
+                            ),
+                        )
+                    )
                 ),
             ),
         ),
@@ -68,5 +78,51 @@ return array(
         'template_path_stack' => array(
             __DIR__ . '/../view',
         ),
+    ),
+    'service_manager' => array(
+        'invokables' => array(
+            'test-manager' => 'Exam\Model\TestManager',
+        )
+    ),
+    'acl' => array(
+        'resource' => array(
+            'test' => null,
+        ),
+        'allow' => array(
+            array('guest', 'test', 'list'),
+            array('member', 'test', array('list', 'take')),
+            array('admin', 'test', array('reset')),
+        ),
+        'modules' => array(
+            'Exam',
+        )
+    ),
+    'navigation' => array(
+        'default' => array(
+            array(
+                'label' => 'Exam',
+                'route' => 'exam',
+                'pages' => array(
+                    array(
+                        'label' => 'List',
+                        'route' => 'exam/list',
+                        // acl
+                        'resource' => 'test',
+                        'privilege' => 'list',
+                    ),
+                    array(
+                        'label' => 'Reset',
+                        'title' => 'Reset the test to the default set',
+                        // uri
+                        'route' => 'exam/default',
+                        'controller' => 'test',
+                        'action' => 'reset',
+                        // acl
+                        'resource' => 'test',
+                        'privilege' => 'reset',
+                    ),
+                )
+            ),
+        )
     ),
 );

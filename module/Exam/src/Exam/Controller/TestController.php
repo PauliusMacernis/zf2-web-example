@@ -3,6 +3,7 @@
 namespace Exam\Controller;
 
 use Exam\Form\Element\Question\QuestionInterface;
+use Exam\Model\Test;
 use Zend\Mvc\Controller\AbstractActionController;
 //use Zend\View\Model\ViewModel;
 use Zend\Form\Factory;
@@ -20,15 +21,20 @@ class TestController extends AbstractActionController
         return array();
     }
 
-    public function takeAction() {
+    public function takeAction()
+    {
         $id = $this->params('id');
-        if(!$id) {
+        if (!$id) {
             return $this->redirect()->toRoute('exam/list');
         }
 
+        /* Two comment following lines were added instead of these three commented:
         $factory = new Factory();
         $spec = include __DIR__ . '/../../../config/form/form1.php';
         $form = $factory->create($spec);
+        */
+        $testManager = $this->serviceLocator->get('test-manager');
+        $form = $testManager->createForm($id);
 
         $form->setAttribute('method', 'POST');
 
@@ -45,21 +51,21 @@ class TestController extends AbstractActionController
             )
         ));
 
-        if($this->getRequest()->isPost()) {
+        if ($this->getRequest()->isPost()) {
             $data = $this->getRequest()->getPost();
             $form->setData($data);
             $correct = 0;
             $total = 0;
-            if($form->isValid()) {
+            if ($form->isValid()) {
                 $this->flashMessenger()->addSuccessMessage('Great! You have 100% correct answers.');
             } else {
                 // Mark count the number of correct answers
-                foreach($form as $element) {
-                    if($element instanceof QuestionInterface) {
+                foreach ($form as $element) {
+                    if ($element instanceof QuestionInterface) {
                         $total++;
                         $form->setValidationGroup($element->getName());
                         $form->setData($data);
-                        if($form->isValid()) {
+                        if ($form->isValid()) {
                             $correct++;
                         }
                     }
@@ -70,6 +76,30 @@ class TestController extends AbstractActionController
         }
 
         return array('form' => $form);
+
+    }
+
+    public function resetAction() {
+
+        $model = new Test();
+
+        // Delete all existing tests
+        if($this->params('flush')) {
+            $model->delete(array());
+        }
+
+        // fill the default tests
+        $manager = $this->serviceLocator->get('test-manager');
+        $tests = $manager->getDefaultTests();
+        foreach($tests as $test) {
+            $data = $test['info'];
+            $data['definition'] = json_encode($test);
+            $manager->store($data);
+        }
+
+        $this->flashMessenger()->addSuccessMessage('The default test were added');
+
+        return $this->redirect()->toRoute('exam/list');
 
     }
 
