@@ -2,6 +2,7 @@
 namespace User;
 
 use Zend\Mvc\MvcEvent;
+use Zend\View\Helper\ViewModel;
 
 class Module
 {
@@ -54,6 +55,20 @@ class Module
             $log->warn('Registered user [' . $user->getName() . '/' . $user->getId() . ']');
         });
 
+        // Inject current user and acl objects into view model when start rendering data
+        $eventManager->attach('render', array($this, 'injectUserAcl'));
+
+    }
+
+    public function injectUserAcl(MvcEvent $event) {
+        if(!$event->getResponse()->contentSent()) {
+            $services = $event->getApplication()->getServiceManager();
+            $viewModel = $event->getResult();
+            if($viewModel instanceof ViewModel) {
+                $viewModel->setVariable('user', $services->get('user'));
+                $viewModel->setVariable('acl', $services->get('acl'));
+            }
+        }
     }
 
     /**

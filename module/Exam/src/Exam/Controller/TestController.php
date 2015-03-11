@@ -7,6 +7,10 @@ use Exam\Model\Test;
 use Zend\Mvc\Controller\AbstractActionController;
 //use Zend\View\Model\ViewModel;
 use Zend\Form\Factory;
+// listAction
+use Zend\Paginator\Adapter\DbSelect as PaginatorDbAdapter;
+use Zend\Paginator\Paginator;
+
 
 class TestController extends AbstractActionController
 {
@@ -18,7 +22,19 @@ class TestController extends AbstractActionController
 
     public function listAction()
     {
-        return array();
+        $testModel = new Test();
+        $result = $testModel->getSql()->select()->where(array('active' => 1));
+
+        $adapter = new PaginatorDbAdapter($result, $testModel->getAdapter());
+        $paginator = new Paginator($adapter);
+        $currentPage = $this->params('page', 1);
+        $paginator->setCurrentPageNumber($currentPage);
+        $paginator->setItemCountPerPage(10);
+
+        return array(
+            'tests' => $paginator,
+            'page' => $currentPage
+        );
     }
 
     public function takeAction()
