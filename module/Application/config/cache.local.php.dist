@@ -8,6 +8,7 @@ return array(
             'name' => 'filesystem',
             'options' => array(
                 'cache_dir' => 'data/cache/text',
+                'ttl'       => 100, // Time To Live
             )
         ),
         'plugins' => array(

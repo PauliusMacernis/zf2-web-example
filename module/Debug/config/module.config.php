@@ -59,6 +59,7 @@ return array(
         ),
         'initializers' => array(
             'Debug\Service\Initializer\DbProfiler',
+            'cache-profiler' => 'Debug\Service\Initializer\CacheProfiler',
         )
 
     ),
