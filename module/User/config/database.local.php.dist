@@ -13,9 +13,9 @@ return array(
     'db' => array(
         // The database driver. Mysqli, Sqlsrv, Pdo_Sqlite, Pdo_Mysql, Pdo=OtherPdoDriver
         'driver' => 'Mysqli',
-        'database' => 'tc', // generally required the name of the database (schema)
-        'username' => 'tc-db-username', // generally required the connection username
-        'password' => 'tc-db-password', // generally required the connection password
+        'database' => 'veikt', // generally required the name of the database (schema)
+        'username' => 'root', // generally required the connection username
+        'password' => '123', // generally required the connection password
         // now generally required the IP address or hostname to connect to
         'hostname' => 'localhost',
         // 'port' => 1234, // not generally required the port to connect to (if applicable)
