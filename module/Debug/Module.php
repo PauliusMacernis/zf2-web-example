@@ -58,6 +58,10 @@ class Module implements AutoloaderProviderInterface
         }
     }
 
+    /**
+     * Injects common variables in the view model
+     * @param MvcEvent $event
+     */
     public function injectViewVariables(MvcEvent $event)
     {
         $viewModel = $event->getViewModel();

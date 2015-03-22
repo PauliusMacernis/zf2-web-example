@@ -22,14 +22,32 @@ class TestController extends AbstractActionController
 
     public function listAction()
     {
-        $testModel = new Test();
-        $result = $testModel->getSql()->select()->where(array('active' => 1));
-
-        $adapter = new PaginatorDbAdapter($result, $testModel->getAdapter());
-        $paginator = new Paginator($adapter);
         $currentPage = $this->params('page', 1);
-        $paginator->setCurrentPageNumber($currentPage);
-        $paginator->setItemCountPerPage(10);
+        $cacheKey = 'exam-list-' . $currentPage;
+
+        // Non-core logic to check if we have the data in cache already
+        $cache = $this->getServiceLocator()->get('var-cache');
+        $paginator = $cache->getItem($cacheKey);
+
+        if(!$paginator) {
+            // Core Logic related to listing tests
+            $testModel = new Test();
+            $result = $testModel->getSql()->select()->where(array('active' => 1));
+
+            $adapter = new PaginatorDbAdapter($result, $testModel->getAdapter());
+            $paginator = new Paginator($adapter);
+
+            $paginator->setCurrentPageNumber($currentPage);
+            $paginator->setItemCountPerPage(10);
+
+            // Non-Core to save the data in the cache
+            $cache->setItem($cache, $paginator->toArray());
+        }
+
+        // Caching parts of the code
+        //$cache = $this->getServiceLocator()->get('cache');
+        //\Zend\Paginator\Paginator::setCache($cache);
+        //$paginator->setCacheEnabled(true);      // @todo: make sure this is needed.//just in case the cache was disabled
 
         return array(
             'tests' => $paginator,
@@ -96,6 +114,11 @@ class TestController extends AbstractActionController
 
     }
 
+    /**
+     * Fills the tests with some default tests
+     *
+     * @return \Zend\Http\Response
+     */
     public function resetAction() {
 
         $model = new Test();
@@ -113,6 +136,13 @@ class TestController extends AbstractActionController
             $data['definition'] = json_encode($test);
             $manager->store($data);
         }
+
+        // ..
+
+        $cache = $this->getServiceLocator()->get('text-cache');
+        $cache->clearByTags(array('exam-list'));
+
+        // ...
 
         $this->flashMessenger()->addSuccessMessage('The default test were added');
 

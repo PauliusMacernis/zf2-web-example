@@ -64,6 +64,9 @@ return array(
                                 'controller'    => 'test',
                                 'action'        => 'list',
                                 'page'          => 1,
+                                //'pagecache'     => isset($_COOKIE['LANG']) ? $_COOKIE['LANG'] : 'en',
+                                'actioncache'   => 1,
+                                'tags'          => array('exam-list'),
                             ),
                         ),
                     )

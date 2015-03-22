@@ -59,12 +59,16 @@ return array(
         ),
         'factories' => array(
             'text-cache' => 'Zend\Cache\Service\StorageCacheFactory',
+            'var-cache' => 'Application\Service\Factory\VariableCache',
             'cipher' => 'Application\Service\Factory\SymmetricCipher',
             'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
         ),
+        'invokables' => array(
+            // ...
+        ),
         'aliases' => array(
             'translator' => 'MvcTranslator',
-        )
+        ),
     ),
     'translator' => array(
         'locale' => 'en_US',
