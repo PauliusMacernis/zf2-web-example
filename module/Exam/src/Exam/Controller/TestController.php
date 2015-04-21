@@ -23,6 +23,23 @@ class TestController extends AbstractActionController
     public function listAction()
     {
         $currentPage = $this->params('page', 1);
+
+        $testModel = new Test();
+        $result = $testModel->getSql()->select()->where(array('active' => 1));
+
+        $adapter = new PaginatorDbAdapter($result, $testModel->getAdapter());
+        $paginator = new Paginator($adapter);
+
+        // @todo: check if paginator cache really works
+        $cache = $this->getServiceLocator()->get('text-cache');
+        \Zend\Paginator\Paginator::setCache($cache);
+        $paginator->setCacheEnabled(true); // just in case the cache was disabled
+
+        $paginator->setCurrentPageNumber($currentPage);
+        $paginator->setItemCountPerPage(10);
+
+        /*
+        $currentPage = $this->params('page', 1);
         $cacheKey = 'exam-list-' . $currentPage;
 
         // Non-core logic to check if we have the data in cache already
@@ -43,7 +60,7 @@ class TestController extends AbstractActionController
             // Non-Core to save the data in the cache
             $cache->setItem($cache, $paginator->toArray());
         }
-
+        */
         // Caching parts of the code
         //$cache = $this->getServiceLocator()->get('cache');
         //\Zend\Paginator\Paginator::setCache($cache);

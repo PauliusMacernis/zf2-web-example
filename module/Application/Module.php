@@ -34,10 +34,8 @@ class Module
             // The priority must be low in order to be executed after rendering is done.
             $eventManager->attach(MvcEvent::EVENT_RENDER, array($this, 'savePageCache'), -10000);
 
-            $eventManager->attach(MvcEvent::EVENT_DISPATCH,
-                array($this, 'getActionCache'), 2);
-            $eventManager->attach(MvcEvent::EVENT_RENDER,
-                array($this, 'saveActionCache'), 0);
+            $eventManager->attach(MvcEvent::EVENT_DISPATCH, array($this, 'getActionCache'), 2);
+            $eventManager->attach(MvcEvent::EVENT_RENDER, array($this, 'saveActionCache'), 0);
         }
 
         if($services->has('var-cache')) {
@@ -60,7 +58,6 @@ class Module
                 }
             }
         }
-
     }
 
 
@@ -106,7 +103,7 @@ class Module
             if($result instanceof ViewModel) {
                 $cache = $event->getApplication()
                     ->getServiceManager()
-                    ->get('cache');
+                    ->get('text-cache');
                 // Warning: the line below needs improvement.
                 // It will work for all PHP templates, but would have
                 // to be made more flexible if you had planned to use

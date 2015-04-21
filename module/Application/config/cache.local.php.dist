@@ -40,6 +40,7 @@ return array(
     'cache-enabled-services' => array(
         'translator',
     ),
+    // @todo: do we need it? As we set paginator cache inside the code where paginator is being used.
     'cache-enabled-classes' => array(
         '\\Zend\\Paginator\\Paginator',
     )
