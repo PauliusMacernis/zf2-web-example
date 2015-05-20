@@ -101,7 +101,15 @@ return array(
     'service_manager' => array(
         'invokables' => array(
             'test-manager' => 'Exam\Model\TestManager',
-        )
+            'pdf' => 'Exam\Service\Invokable\Pdf',
+            'mail' => 'Exam\Service\Invokable\Mail',
+        ),
+        'factories' => array(
+            'mail-transport' => 'Exam\Service\Factory\MailTransport'
+        ),
+    ),
+    'cache-enabled-services' => array(
+        'translator'
     ),
     'acl' => array(
         'resource' => array(
@@ -144,4 +152,7 @@ return array(
             ),
         )
     ),
+    'pdf' => array(
+        'exam_certificate'  => __DIR__ . '/../samples/pdf/exam_certificate.pdf',
+    )
 );

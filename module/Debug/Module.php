@@ -94,6 +94,7 @@ class Module implements AutoloaderProviderInterface
                     $exception->getTraceAsString();
         }
 
+        //print_r(str_replace("\n", "<br />", $message));
         error_log($message);
     }
 

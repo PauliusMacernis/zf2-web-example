@@ -2,6 +2,7 @@
 
 namespace Exam\Controller;
 
+use Zend\EventManager\EventManager;
 use Exam\Form\Element\Question\QuestionInterface;
 use Exam\Model\Test;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -109,6 +110,18 @@ class TestController extends AbstractActionController
             $total = 0;
             if ($form->isValid()) {
                 $this->flashMessenger()->addSuccessMessage('Great! You have 100% correct answers.');
+
+                $user = $this->getServiceLocator()->get('user');
+
+                $exam = $this->getServiceLocator()->get('test-manager')->get($id);
+                $examName = $exam->offsetGet('name');
+
+                $event = new EventManager('exam');
+                $event->trigger('taken-excellent', null, array(
+                    'user' => $user,
+                    'exam' => $examName,
+                ));
+
             } else {
                 // Mark count the number of correct answers
                 foreach ($form as $element) {
@@ -164,6 +177,35 @@ class TestController extends AbstractActionController
         $this->flashMessenger()->addSuccessMessage('The default test were added');
 
         return $this->redirect()->toRoute('exam/list');
+
+    }
+
+    public function certificateAction() {
+
+        $pdfService = $this->getServiceLocator()->get('pdf');
+
+        $user = $this->getServiceLocator()->get('user');
+
+        $id = $this->params('id'); // exam id
+        if($id) {
+            $exam = $this->getServiceLocator()->get('test-manager')->get($id);
+            $examName = $exam->offsetGet('name');
+        } else {
+            $examName = ''; // Exam has no name while no id is provided
+        }
+        $pdf = $pdfService->generateCertificate($user, $examName);
+
+        $response = $this->getResponse();
+
+        // We need to set a content-type header so that the browser is able to recognize our pdf and display it.
+        $response->getHeaders()->addHeaderLine('Content-Type: application/pdf');
+
+        $response->setContent($pdf->render());
+
+        // If we want to shortcut the execution we just return the
+        // response object and then the view and the layout are not
+        // rendered at all.
+        return $response;
 
     }
 
