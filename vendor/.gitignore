@@ -6,6 +6,7 @@ autoload.php
 phpunit
 symfony
 doctrine
+paulius-m
 phpdocumentor
 phpspec
 sebastian

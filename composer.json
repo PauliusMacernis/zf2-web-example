@@ -7,12 +7,19 @@
         "zf2"
     ],
     "homepage": "http://framework.zend.com/",
+    "repositories": [{
+      "type": "git",
+      "url": "https://bitbucket.org/paulius-macernis/zf2-exam"
+    }],
     "require": {
         "php": ">=5.3.6",
         "zendframework/zendframework": "2.3.9",
         "doctrine/common": ">=2.1",
         "doctrine/orm": ">=2.1",
-        "zendframework/zendpdf": "2.*"
+        "zendframework/zendpdf": "2.*",
+        "paulius-m/zf2-user": "dev-master",
+        "paulius-m/zf2-debug": "dev-master",
+        "paulius-m/zf2-exam": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit" : "4.5.*"

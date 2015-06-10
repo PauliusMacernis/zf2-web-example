@@ -15,7 +15,7 @@ return array(
                 // This is the debug template that surrounds the page.
                 // You can change the value of the key to point to a view template
                 // file that is more shiny.
-                'debug/layout/sidebar' => __DIR__ . '/../../module/Debug/view/debug/layout/sidebar.phtml',
+                'debug/layout/sidebar' => __DIR__ . '/../../vendor/paulius-m/zf2-debug/view/debug/layout/sidebar.phtml',
             )
         ),
 );
