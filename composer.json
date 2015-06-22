@@ -9,7 +9,7 @@
     "homepage": "http://framework.zend.com/",
     "repositories": [{
       "type": "git",
-      "url": "https://bitbucket.org/paulius-macernis/zf2-exam"
+      "url": "git@bitbucket.org:paulius-macernis/zf2-exam.git"
     }],
     "require": {
         "php": ">=5.3.6",
