@@ -23,5 +23,13 @@
     },
     "require-dev": {
         "phpunit/phpunit" : "4.5.*"
+    },
+    "scripts": {
+      "post-install-cmd": [
+        "cp module/Application/config/cache.local.php.dist config/autoload/cache.local.php",
+        "cp module/Application/config/crypto.local.php.dist config/autoload/crypto.local.php",
+        "cp vendor/paulius-m/zf2-user/config/database.local.php.dist config/autoload/database.local.php",
+        "cp vendor/paulius-m/zf2-user/config/log.local.php.dist config/autoload/log.local.php"
+      ]
     }
 }
